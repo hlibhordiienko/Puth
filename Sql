@@ -1,0 +1,34 @@
+import cx_Oracle
+import csv
+
+# Установите соединение с базой данных Oracle
+connection = cx_Oracle.connect("ваша_строка_подключения_к_oracle")
+
+# Определите SQL-запрос
+sql_query = "SELECT * FROM ваша_таблица"
+
+# Выполните запрос
+cursor = connection.cursor()
+cursor.execute(sql_query)
+
+# Получите описание столбцов
+columns = [col[0] for col in cursor.description]
+
+# Создайте новый CSV-файл
+csv_file = "output.csv"
+
+with open(csv_file, "w", newline="") as file:
+    csv_writer = csv.writer(file)
+    
+    # Запишите заголовки столбцов
+    csv_writer.writerow(columns)
+    
+    # Запишите данные из результата SQL-запроса
+    for row in cursor:
+        csv_writer.writerow(row)
+
+# Закройте соединение с Oracle
+cursor.close()
+connection.close()
+
+print(f"Результаты SQL-запроса сохранены в файл {csv_file}")
