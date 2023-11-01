@@ -25,7 +25,7 @@ columns = [col[0] for col in cursor.description]
 csv_output_file = "output2.csv"
 
 with open(csv_output_file, "w", newline="") as file:
-    csv_writer = csv.writer(file)
+    csv_writer = csv.writer(file, delimiter="|" )
     
     # Запишите заголовки столбцов
     csv_writer.writerow(columns)
