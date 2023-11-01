@@ -1,0 +1,41 @@
+import cx_Oracle
+import csv
+
+# Установите соединение с базой данных Oracle
+connection = cx_Oracle.connect("ваша_строка_подключения_к_oracle")
+
+# Прочитайте номера из CSV-файла
+csv_file = "номера.csv"
+
+with open(csv_file, "r") as file:
+    csv_reader = csv.reader(file)
+    numbers = [row[0] for row in csv_reader]  # Предполагается, что номера находятся в первом столбце
+
+# Создайте SQL-запрос, используя номера из CSV
+sql_query = f"SELECT * FROM ваша_таблица WHERE номер IN ({', '.join(numbers)})"
+
+# Выполните запрос
+cursor = connection.cursor()
+cursor.execute(sql_query)
+
+# Получите описание столбцов
+columns = [col[0] for col in cursor.description]
+
+# Создайте новый CSV-файл
+csv_output_file = "output.csv"
+
+with open(csv_output_file, "w", newline="") as file:
+    csv_writer = csv.writer(file)
+    
+    # Запишите заголовки столбцов
+    csv_writer.writerow(columns)
+    
+    # Запишите данные из результата SQL-запроса
+    for row in cursor:
+        csv_writer.writerow(row)
+
+# Закройте соединение с Oracle
+cursor.close()
+connection.close()
+
+print(f"Результаты SQL-запроса сохранены в файл {csv_output_file}")
