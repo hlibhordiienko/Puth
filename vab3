@@ -1,0 +1,28 @@
+Sub CreateFileList()
+    Dim FolderPath As String
+    Dim FileName As String
+    Dim ListRow As Long
+    
+    ' Specify the folder path
+    FolderPath = "Path\to\your\folder\"
+    
+    ' Specify the row number to start the list in the current sheet
+    ListRow = 1
+    
+    ' Clear the previous list if any
+    Cells(ListRow, 1).CurrentRegion.ClearContents
+    
+    ' Iterate through files in the folder
+    FileName = Dir(FolderPath & "*.*")
+    
+    Do While FileName <> ""
+        ' Display the file name in a cell
+        Cells(ListRow, 1).Value = FileName
+        
+        ' Move to the next row in the list
+        ListRow = ListRow + 1
+        
+        ' Move to the next file
+        FileName = Dir
+    Loop
+End Sub
