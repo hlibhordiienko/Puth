@@ -1,0 +1,30 @@
+import os
+import xml.etree.ElementTree as ET
+
+def merge_xml_files(folder_path, output_file_path):
+    with open(output_file_path, 'w', encoding='utf-8') as output:
+        output.write('<root>\n')  # Открываем корневой элемент в новом файле
+
+        for root, dirs, files in os.walk(folder_path):
+            for file in files:
+                if file.endswith('.xml'):
+                    file_path = os.path.join(root, file)
+                    tree = ET.parse(file_path)
+                    root_element = tree.getroot()
+
+                    # Записываем содержимое в новый файл
+                    output.write(ET.tostring(root_element, encoding='utf-8').decode('utf-8'))
+
+        output.write('\n</root>')  # Закрываем корневой элемент в новом файле
+
+# Путь для сохранения файла
+output_file_path = '/путь/для/сохранения/output.xml'
+
+# Путь к главной папке
+main_folder_path = '/путь/к/главной/папке'
+
+# Выполняем задачу
+merge_xml_files(main_folder_path, output_file_path)
+
+# Выводим сообщение о выполнении задачи
+print(f'Задача выполнена. Результат сохранен в файле: {output_file_path}')
